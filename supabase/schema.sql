@@ -7,3 +7,7 @@ create policy "profiles readable" on public.profiles for select to authenticated
 create policy "own profile insert" on public.profiles for insert to authenticated with check (auth.uid()=id);
 create policy "messages readable" on public.messages for select to authenticated using (true);
 create policy "messages insert own" on public.messages for insert to authenticated with check (auth.uid()=sender_id);
+
+insert into storage.buckets (id,name,public) values ('documents','documents',true) on conflict (id) do update set public=true;
+create policy "documents read" on storage.objects for select to authenticated using (bucket_id='documents');
+create policy "documents upload own folder" on storage.objects for insert to authenticated with check (bucket_id='documents' and (storage.foldername(name))[1]=auth.uid()::text);
