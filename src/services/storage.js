@@ -1,0 +1,2 @@
+import { supabase } from '../lib/supabase';
+export async function uploadDocument(file,userId){if(!supabase)throw new Error('Supabase environment is not configured');const response=await fetch(file.uri);const blob=await response.blob();const path=userId+'/'+Date.now()+'-'+file.name;const {error}=await supabase.storage.from('documents').upload(path,blob,{contentType:file.mimeType||'application/octet-stream',upsert:false});if(error)throw error;const {data}=supabase.storage.from('documents').getPublicUrl(path);return {path,url:data.publicUrl,name:file.name};}
