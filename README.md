@@ -1,7 +1,33 @@
-AJislive3 is a React Native/Expo communication app.
+# AJislive3
 
-Included: chat UI, Supabase realtime/chat service, Supabase document-storage service, voice/video call entry points, database schema and Row Level Security, environment template.
+AJislive3 is an Expo React Native messaging app foundation with:
 
-Backend setup: create a Supabase project; run supabase/schema.sql; create a Storage bucket named documents and configure storage policies; copy .env.example to .env and add the project URL and anon key. For real video/voice, configure LiveKit/WebRTC and a secure server-side token endpoint. Never put a LiveKit API secret in the mobile app.
+- Email/password signup and login
+- Supabase Realtime chat
+- Document picker + Supabase Storage document sharing
+- Video/voice call buttons prepared for LiveKit
+- Dark AJislive3 UI
 
-The repository contains no private service keys.
+## Supabase setup
+
+1. Create a Supabase project.
+2. Open **SQL Editor** and run `supabase/schema.sql`.
+3. The SQL creates the `documents` public bucket and its upload/read policies.
+4. In the Expo environment, set:
+   - `EXPO_PUBLIC_SUPABASE_URL`
+   - `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (preferred) or `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+5. Start with `npm install` then `npx expo start`.
+
+Do not commit private service-role keys or database passwords.
+
+## Calling
+
+The app UI is prepared for LiveKit voice/video calling. Actual WebRTC calling requires a LiveKit server and a secure backend token endpoint. LiveKit's Expo SDK uses native modules, so a development build is required rather than Expo Go.
+
+See the official docs:
+- https://supabase.com/docs/guides/getting-started/quickstarts/expo-react-native
+- https://docs.livekit.io/transport/sdk-platforms/expo/
+
+## Current status
+
+Chat and document-sharing code is connected to Supabase and will work after the Supabase project/environment is configured. Voice/video requires LiveKit credentials plus a server-side token endpoint; never put the LiveKit API secret in the mobile app.
