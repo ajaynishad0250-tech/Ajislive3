@@ -1,0 +1,3 @@
+import { supabase } from '../lib/supabase';
+export async function sendMessage({conversationId,senderId,body,attachment_url=null,attachment_name=null}){if(!supabase)throw new Error('Supabase environment is not configured');return supabase.from('messages').insert({conversation_id:conversationId,sender_id:senderId,body,attachment_url,attachment_name}).select().single();}
+export function subscribeToMessages(conversationId,onMessage){if(!supabase)return ()=>{};const channel=supabase.channel('messages:'+conversationId).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'conversation_id=eq.'+conversationId},payload=>onMessage(payload.new)).subscribe();return ()=>supabase.removeChannel(channel);}
